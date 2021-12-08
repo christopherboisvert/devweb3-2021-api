@@ -10,7 +10,7 @@ router.get('/', async function (req, res) {
         var liste_utilisateur = await Utilisateur.find({})
         res.json(liste_utilisateur)
     }
-    catch (exception) {=
+    catch (exception) {
         res.status(500).json({
             "exception": {
                 "errors": exception
@@ -51,9 +51,9 @@ router.post('/', async function (req, res) {
                     "errors": {
                         "courriel": {
                             "name": "UniqueIndexError",
-                            "message": "Ce courriel est dÈj‡ pris !",
+                            "message": "Ce courriel est d√©j√† pris !",
                             "properties": {
-                                "message": "Ce courriel est dÈj‡ pris !",
+                                "message": "Ce courriel est d√©j√† pris !",
                                 "type": "unique",
                                 "path": "courriel"
                             },
@@ -88,9 +88,9 @@ router.put('/:id', async function (req, res) {
                     "errors": {
                         "courriel": {
                             "name": "UniqueIndexError",
-                            "message": "Ce courriel est dÈj‡ pris !",
+                            "message": "Ce courriel est d√©j√† pris !",
                             "properties": {
-                                "message": "Ce courriel est dÈj‡ pris !",
+                                "message": "Ce courriel est d√©j√† pris !",
                                 "type": "unique",
                                 "path": "courriel"
                             },
