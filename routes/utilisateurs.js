@@ -7,13 +7,10 @@ var Utilisateur = require("../models/utilisateur");
 router.get('/', async function (req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
-        console.log("test");
         var liste_utilisateur = await Utilisateur.find({})
         res.json(liste_utilisateur)
     }
-    catch (exception) {
-        console.log("tes2");
-        console.log(exception)
+    catch (exception) {=
         res.status(500).json({
             "exception": {
                 "errors": exception
