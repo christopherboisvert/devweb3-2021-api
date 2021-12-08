@@ -29,7 +29,7 @@ router.get('/:symbole', async function (req, res) {
         var requestOptions = {
             method: 'GET',
             headers: {
-                "x-api-key": "edaIVkgRrb9EvAXfxlbO06OeaBgUEAsg1nxb2w0v"
+                "x-api-key": process.env.CLE_API_YAHOO_FINANCE
             },
             redirect: 'follow'
         };
@@ -99,7 +99,7 @@ router.get('/:id/actualiser', async function(req, res) {
         var requestOptions = {
             method: 'GET',
             headers: {
-                "x-api-key": "edaIVkgRrb9EvAXfxlbO06OeaBgUEAsg1nxb2w0v"
+                "x-api-key": process.env.CLE_API_YAHOO_FINANCE
             },
             redirect: 'follow'
         };
