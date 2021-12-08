@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const PointAction = new Schema(
     {
         "_id":false,
-        "date": String,
+        "date": Date,
         "prix": Number
     },
     {

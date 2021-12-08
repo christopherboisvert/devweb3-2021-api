@@ -11,7 +11,6 @@ var dotenv = require("dotenv");
 var routes = require('./routes/index');
 var actions = require('./routes/actions');
 var portfolios = require('./routes/portfolios');
-var transactions = require('./routes/transactions');
 var utilisateurs = require('./routes/utilisateurs');
 
 var app = express();

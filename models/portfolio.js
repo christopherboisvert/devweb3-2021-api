@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ActionAchat = new Schema(
     {
-        "date": String,
+        "date": Date,
         "prix": Number
     },
     {
