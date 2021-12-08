@@ -1,13 +1,11 @@
 # ProjetFinalDebWeb3Api
 
 ## Installation du projet
-
-Lancer la commande suivante :
-'''text
+```text
 npm install
-'''
+```
 
 ## Lancement du projet
-'''text
+```text
 npm start
-'''
+```
