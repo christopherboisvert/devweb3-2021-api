@@ -15,8 +15,9 @@ const ActionSchema = new Schema(
     {
         "nom": { type: String, unique: true, required: true },
         "symbole": { type: String, required: true },
-        "marche": String,
-        "monnaie": String,
+        "marche": { type: String, required: true },
+        "monnaie": { type: String, required: true },
+        "type_activite": [String],
         "historique_valeur": [PointAction]
     },
     {

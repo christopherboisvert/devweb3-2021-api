@@ -7,6 +7,7 @@ const UtilisateurSchema = new Schema(
         "mot_de_passe": { type: String, required: [true, 'Le mot de passe est requis !'] },
         "prenom": { type: String, required: [true, 'Le prénom est requis !'] },
         "nom": { type: String, required: [true, 'Le nom est requis !'] },
+        "est_actif": { type: Boolean, default: false }
     },
     {
         "strict": true
