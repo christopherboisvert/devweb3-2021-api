@@ -65,9 +65,8 @@ router.post('/', async function (req, res) {
             }
             else
             {
-                console.log("Le mot de passe se doit d'être fournie")
                 res.status(500).json({
-                    "exception": "Le mot de passe se doit d'être fournie"
+                    "exception": "Une erreur est survenue lors du hachage."
                 })
             }
         }
@@ -92,9 +91,15 @@ router.post('/', async function (req, res) {
                     }
                 })
             }
+            else if(exception !== "")
+            {
+                res.status(400).json({
+                    "exception": exception
+                })
+            }
             else {
                 res.status(500).json({
-                    "exception": exception ? exception : "Une erreur innatendue est survenue"
+                    "exception": "Une erreur inattendue est survenue"
                 })
             }
         } finally {
