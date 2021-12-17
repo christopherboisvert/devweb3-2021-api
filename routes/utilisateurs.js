@@ -54,19 +54,13 @@ router.get('/:id', authentifierToken, async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
+    var nouvel_utilisateur = new Utilisateur(req.body)
     bcrypt.hash(req.body.mot_de_passe, saltRounds, async function (err, hash) {
         try {
             await mongoose.connect(process.env.MONGODB_APP_URI);
             if (!err)
             {
-                req.body.mot_de_passe = hash
-                var nouvel_utilisateur = new Utilisateur({
-                    courriel: req.body.courriel,
-                    mot_de_passe: hash,
-                    prenom: req.body.prenom,
-                    nom: req.body.nom,
-                    est_actif: false
-                })
+                nouvel_utilisateur.mot_de_passe = hash
                 res.json(await nouvel_utilisateur.save())
             }
             else
