@@ -6,10 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var dotenv = require("dotenv");
-const corsOptions = {
-    origin: true
-}
-
+var cors = require('cors')
 
 var routes = require('./routes/index');
 var actions = require('./routes/actions');
@@ -27,7 +24,7 @@ app.set('view engine', 'pug');
 dotenv.config();
 
 //CORS
-app.use(cors(corsOptions))
+app.use(cors())
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
