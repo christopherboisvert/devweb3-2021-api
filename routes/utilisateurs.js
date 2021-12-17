@@ -68,7 +68,7 @@ router.post('/', async function (req, res) {
                         expiresIn: process.env.NODE_ENV === "production" ? "6h" : "2 days",
                     }
                 );
-                res.json({ message: "Vous êtes connecté !", utilisateur: nouvel_utilisateur, token: accessToken });
+                res.json({ message: "Vous êtes connecté !", utilisateur: await nouvel_utilisateur.save(), token: accessToken });
             }
             else
             {
