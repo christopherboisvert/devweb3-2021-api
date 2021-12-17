@@ -94,7 +94,7 @@ router.post('/', async function (req, res) {
             }
             else {
                 res.status(500).json({
-                    "exception": "Une erreur innatendue est survenue"
+                    "exception": exception ? exception : "Une erreur innatendue est survenue"
                 })
             }
         } finally {
