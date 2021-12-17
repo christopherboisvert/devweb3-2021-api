@@ -71,8 +71,9 @@ router.post('/', async function (req, res) {
             }
             else
             {
+                console.log("Le mot de passe se doit d'être fournie")
                 res.status(500).json({
-                    "exception": err
+                    "exception": "Le mot de passe se doit d'être fournie"
                 })
             }
         }
@@ -99,7 +100,7 @@ router.post('/', async function (req, res) {
             }
             else {
                 res.status(500).json({
-                    "exception": exception
+                    "exception": "Une erreur innatendue est survenue"
                 })
             }
         } finally {
