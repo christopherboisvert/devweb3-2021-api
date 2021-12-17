@@ -10,11 +10,15 @@
     "name": ""
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.15.0",
+    "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.0",
     "debug": "^2.2.0",
     "dotenv": "^10.0.0",
     "express": "^4.14.0",
+    "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.9",
     "morgan": "^1.7.0",
     "node-fetch": "^2.6.6",

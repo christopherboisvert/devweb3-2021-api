@@ -1,10 +1,23 @@
 'use strict';
-var express = require('express');
-var router = express.Router();
-var mongoose = require("mongoose");
-var Utilisateur = require("../models/utilisateur");
+const express = require('express');
+const router = express.Router();
+const mongoose = require("mongoose");
+const Utilisateur = require("../models/utilisateur");
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+const authentifierToken = (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token === null) return res.status(401).json({ erreur: "Vous n'avez pas fournir de token !" });
+    jwt.verify(token, process.env.CLE_TOKEN, (err, user) => {
+        if (err) return res.status(401).json({ erreur: err });
+        req.user = user;
+        next();
+    });
+};
 
-router.get('/', async function (req, res) {
+router.get('/', authentifierToken, async function (req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var liste_utilisateur = await Utilisateur.find({})
@@ -22,7 +35,7 @@ router.get('/', async function (req, res) {
     }
 });
 
-router.get('/:id', async function (req, res) {
+router.get('/:id', authentifierToken, async function (req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var liste_utilisateur = await Utilisateur.find({ "_id": req.params.id })
@@ -41,44 +54,61 @@ router.get('/:id', async function (req, res) {
 });
 
 router.post('/', async function (req, res) {
-    try {
-        await mongoose.connect(process.env.MONGODB_APP_URI);
-        var nouvel_utilisateur = new Utilisateur(req.body)
-        res.json(await nouvel_utilisateur.save())
-    }
-    catch (exception) {
-        console.log(exception)
-        if (exception.code === 11000) {
-            res.status(400).json({
-                "exception": {
-                    "errors": {
-                        "courriel": {
-                            "name": "UniqueIndexError",
-                            "message": "Ce courriel est dÈj‡ pris !",
-                            "properties": {
-                                "message": "Ce courriel est dÈj‡ pris !",
-                                "type": "unique",
+    bcrypt.hash(req.body.mot_de_passe, saltRounds, async function (err, hash) {
+        try {
+            await mongoose.connect(process.env.MONGODB_APP_URI);
+            if (!err)
+            {
+                req.body.mot_de_passe = hash
+                var nouvel_utilisateur = new Utilisateur({
+                    courriel: req.body.courriel,
+                    mot_de_passe: hash,
+                    prenom: req.body.prenom,
+                    nom: req.body.nom,
+                    est_actif: false
+                })
+                res.json(await nouvel_utilisateur.save())
+            }
+            else
+            {
+                res.status(500).json({
+                    "exception": err
+                })
+            }
+        }
+        catch (exception) {
+            console.log(exception)
+            if (exception.code === 11000) {
+                res.status(400).json({
+                    "exception": {
+                        "errors": {
+                            "courriel": {
+                                "name": "UniqueIndexError",
+                                "message": "Ce courriel est d√©j√† pris !",
+                                "properties": {
+                                    "message": "Ce courriel est d√©j√† pris !",
+                                    "type": "unique",
+                                    "path": "courriel"
+                                },
+                                "kind": "unique",
                                 "path": "courriel"
-                            },
-                            "kind": "unique",
-                            "path": "courriel"
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
+            else {
+                res.status(500).json({
+                    "exception": exception
+                })
+            }
+        } finally {
+            mongoose.connection.close();
         }
-        else {
-            res.status(500).json({
-                "exception": exception
-            })
-        }
-    } finally {
-        mongoose.connection.close();
-    }
-
+    });
 });
 
-router.put('/:id', async function (req, res) {
+router.put('/:id', authentifierToken, async function (req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var resultat = await Utilisateur.update({ "_id": req.params.id }, req.body);
@@ -92,9 +122,9 @@ router.put('/:id', async function (req, res) {
                     "errors": {
                         "courriel": {
                             "name": "UniqueIndexError",
-                            "message": "Ce courriel est dÈj‡ pris !",
+                            "message": "Ce courriel est d√©j√† pris !",
                             "properties": {
-                                "message": "Ce courriel est dÈj‡ pris !",
+                                "message": "Ce courriel est d√©j√† pris !",
                                 "type": "unique",
                                 "path": "courriel"
                             },
@@ -117,7 +147,7 @@ router.put('/:id', async function (req, res) {
     }
 });
 
-router.delete('/:id', async function (req, res) {
+router.delete('/:id', authentifierToken, async function (req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var resultat = await Utilisateur.findByIdAndDelete(req.params.id)

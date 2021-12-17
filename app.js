@@ -2,16 +2,19 @@
 var debug = require('debug')('my express app');
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var dotenv = require("dotenv");
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
+const session = require('express-session');
 
 var routes = require('./routes/index');
 var actions = require('./routes/actions');
 var portfolios = require('./routes/portfolios');
 var utilisateurs = require('./routes/utilisateurs');
+var connexion = require('./routes/connexion');
 
 var app = express();
 
@@ -34,6 +37,7 @@ app.use('/', routes);
 app.use('/actions', actions);
 app.use('/portfolios', portfolios);
 app.use('/utilisateurs', utilisateurs);
+app.use('/connexion', connexion);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

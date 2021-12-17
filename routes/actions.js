@@ -4,8 +4,19 @@ var router = express.Router();
 var mongoose = require("mongoose");
 var Action = require("../models/action");
 const fetch = require('node-fetch');
+const jwt = require('jsonwebtoken');
+const authentifierToken = (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (token === null) return res.status(401).json({ erreur: "Vous n'avez pas fournir de token !" });
+    jwt.verify(token, process.env.CLE_TOKEN, (err, user) => {
+        if (err) return res.status(401).json({ erreur: err });
+        req.user = user;
+        next();
+    });
+};
 
-router.get('/', async function (req, res) {
+router.get('/', authentifierToken, async function (req, res) {
     await mongoose.connect(process.env.MONGODB_APP_URI);
     try {
         const actions = await Action.find();
@@ -21,7 +32,7 @@ router.get('/', async function (req, res) {
     }
 });
 
-router.get('/:symbole', async function (req, res) {
+router.get('/:symbole', authentifierToken, async function (req, res) {
     await mongoose.connect(process.env.MONGODB_APP_URI);
     const action = await Action.findOne({ symbole: req.params.symbole });
     if (action === null)
@@ -92,7 +103,7 @@ router.get('/:symbole', async function (req, res) {
     }
 });
 
-router.get('/:id/actualiser', async function(req, res) {
+router.get('/:id/actualiser', authentifierToken, async function(req, res) {
     await mongoose.connect(process.env.MONGODB_APP_URI);
     const action = await Action.findOne({ _id: req.params.id });
     if (action !== null) {
@@ -152,7 +163,7 @@ router.get('/:id/actualiser', async function(req, res) {
 });
 
 //Permet de modifier une des actions
-router.put('/:id', async function(req, res) {
+router.put('/:id', authentifierToken, async function(req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var resultat = await Action.updateOne({ "_id": req.params.id }, req.body);
@@ -169,7 +180,7 @@ router.put('/:id', async function(req, res) {
     }
 });
 
-router.delete('/:id', async function(req, res) {
+router.delete('/:id', authentifierToken, async function(req, res) {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
         var resultat = await Action.findByIdAndDelete(req.params.id)
