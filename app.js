@@ -25,6 +25,9 @@ app.set('view engine', 'pug');
 // dotenv setup
 dotenv.config();
 
+//CORS
+app.use(cors())
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
