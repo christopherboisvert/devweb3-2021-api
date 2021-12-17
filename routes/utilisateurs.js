@@ -61,7 +61,14 @@ router.post('/', async function (req, res) {
             {
                 req.body.mot_de_passe = hash
                 var nouvel_utilisateur = new Utilisateur(req.body)
-                res.json(await nouvel_utilisateur.save())
+                const accessToken = jwt.sign(
+                    { identifiant, id: nouvel_utilisateur._id },
+                    process.env.CLE_TOKEN,
+                    {
+                        expiresIn: process.env.NODE_ENV === "production" ? "6h" : "2 days",
+                    }
+                );
+                res.json({ message: "Vous êtes connecté !", utilisateur: nouvel_utilisateur, token: accessToken });
             }
             else
             {
