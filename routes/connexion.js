@@ -20,7 +20,7 @@ router.post('', async (req, res) => {
         bcrypt.compare(mot_de_passe, utilisateur.mot_de_passe, function (err, result) {
             if (!err && result) {
                 const accessToken = jwt.sign(
-                    { identifiant, id: utilisateur._id },
+                    { courriel, id: utilisateur._id },
                     process.env.CLE_TOKEN,
                     {
                         expiresIn: process.env.NODE_ENV === "production" ? "6h" : "2 days",
