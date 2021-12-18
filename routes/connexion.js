@@ -9,9 +9,9 @@ var Utilisateur = require("../models/utilisateur");
 router.post('', async (req, res) => {
     try {
         await mongoose.connect(process.env.MONGODB_APP_URI);
-        const { identifiant, mot_de_passe } = req.body;
+        const { courriel, mot_de_passe } = req.body;
 
-        let utilisateur = await Utilisateur.findOne({ courriel: identifiant })
+        let utilisateur = await Utilisateur.findOne({ courriel: courriel })
 
         if (!utilisateur) {
             return res.json({ erreur: "Veuillez entrer un nom d'identifiant valide !" });
